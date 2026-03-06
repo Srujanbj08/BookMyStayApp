@@ -52,6 +52,7 @@ public class Main {
         }
 
         BookingService bookingService = new BookingService(inventory);
+        BookingHistory history = new BookingHistory();
 
         System.out.println("\nProcessing Booking Requests (FIFO):");
 
@@ -62,6 +63,8 @@ public class Main {
             System.out.println("\nProcessing Reservation: " + r.getReservationId());
 
             bookingService.confirmReservation(r);
+
+            history.addReservation(r);
 
             try {
                 Thread.sleep(3000);
@@ -92,6 +95,9 @@ public class Main {
 
         System.out.println("\nServices for Reservation " + reservationId + ":");
         manager.showServices(reservationId);
+
+        System.out.println("\nBooking History:");
+        history.showHistory();
 
         sc.close();
     }
