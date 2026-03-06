@@ -8,7 +8,6 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
-        // -------- UC1 : Inventory Setup --------
         InventoryService inventory = new InventoryService();
 
         inventory.addRoomType("Single", 5, 2000);
@@ -18,8 +17,6 @@ public class Main {
         System.out.println("Room Inventory:");
         inventory.displayInventory();
 
-
-        // -------- UC2 : Room Search --------
         SearchService search = new SearchService(inventory);
 
         System.out.print("\nEnter Room Type to Search: ");
@@ -27,8 +24,6 @@ public class Main {
 
         search.searchRoom(type);
 
-
-        // -------- UC3 : Booking Request Queue --------
         BookingQueueService queue = new BookingQueueService();
 
         System.out.print("\nEnter number of booking requests: ");
@@ -50,14 +45,12 @@ public class Main {
             queue.addBookingRequest(reservation);
 
             try {
-                Thread.sleep(2000); // simulate request arrival delay
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-
-        // -------- UC4 : Reservation Confirmation --------
         BookingService bookingService = new BookingService(inventory);
 
         System.out.println("\nProcessing Booking Requests (FIFO):");
@@ -71,7 +64,7 @@ public class Main {
             bookingService.confirmReservation(r);
 
             try {
-                Thread.sleep(3000); // simulate processing delay
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -79,6 +72,26 @@ public class Main {
 
         System.out.println("\nUpdated Inventory:");
         inventory.displayInventory();
+
+        ServiceManager manager = new ServiceManager();
+
+        System.out.println("\nAdd Service to Reservation");
+
+        System.out.print("Enter Reservation ID: ");
+        String reservationId = sc.nextLine();
+
+        System.out.print("Enter Service Name: ");
+        String serviceName = sc.nextLine();
+
+        System.out.print("Enter Service Price: ");
+        double price = sc.nextDouble();
+
+        Service service = new Service(serviceName, price);
+
+        manager.addService(reservationId, service);
+
+        System.out.println("\nServices for Reservation " + reservationId + ":");
+        manager.showServices(reservationId);
 
         sc.close();
     }
