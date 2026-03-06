@@ -17,11 +17,57 @@ public class Main {
         System.out.println("Room Inventory:");
         inventory.displayInventory();
 
+
         SearchService search = new SearchService(inventory);
 
-        System.out.print("Enter Room Type to Search: ");
+        System.out.print("\nEnter Room Type to Search: ");
         String type = sc.nextLine();
 
         search.searchRoom(type);
+
+
+        BookingQueueService queue = new BookingQueueService();
+
+        System.out.print("\nEnter number of booking requests: ");
+        int n = sc.nextInt();
+        sc.nextLine(); // clear buffer
+
+        for (int i = 1; i <= n; i++) {
+
+            System.out.println("\nBooking Request " + i);
+
+            System.out.print("Enter Reservation ID: ");
+            String id = sc.nextLine();
+
+            System.out.print("Enter Room Type: ");
+            String roomType = sc.nextLine();
+
+            Reservation r = new Reservation(id, roomType);
+
+            queue.addBookingRequest(r);
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("\nProcessing Booking Requests (FIFO):");
+
+        Reservation r;
+
+        while ((r = queue.getNextRequest()) != null) {
+
+            System.out.println("Processing Reservation: " + r.getReservationId());
+
+            try {
+                Thread.sleep(3000); // processing delay
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        sc.close();
     }
 }
